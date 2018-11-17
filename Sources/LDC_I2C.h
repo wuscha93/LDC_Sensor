@@ -59,7 +59,7 @@
 
 //#define SLEEP_MODE_EN							0x2000
 #define VAL_DEFAULT_CONFIG_NO_CONVERSION		0x3a01
-#define VAL_DEFAULT_CONFIG_WITH_CONVERSION		0x1a01
+#define VAL_DEFAULT_CONFIG_START_CONVERSION		0x1a01
 #define VAL_SETTLECOUNT0						0x0400
 #define VAL_SETTLECOUNT1						0x0400
 #define VAL_RCOUNT0								0xffff
@@ -82,6 +82,10 @@ uint8_t LDC_startConversion(unsigned char channel);
 uint8_t LDC_writeWordAddress8(uint8_t i2cDeviceAddress, uint8_t deviceRegister, uint16_t value);
 
 uint8_t LDC_readWordAddress8(uint8_t i2cDeviceAddress, uint8_t deviceRegister, uint16_t *value);
+
+uint8_t LDC_ReadWordAddress8(uint8_t deviceregister, uint16_t *buffer);
+
+uint8_t LDC_getDigitalOutputCode(unsigned char channel, uint32_t *digitaloutputcode);
 
 
 #endif /* SOURCES_LDC_I2C_H_ */

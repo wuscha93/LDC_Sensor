@@ -53,11 +53,19 @@ static void CDC_Run(){
 
 
 void APP_Run(void) {
+
+	uint32_t digitaloutputcode;
+	unsigned char string_doc[32];
 	LDC_Init();
 	for(;;){
 		CDC_Run();
 		WAIT1_Waitms(100);
-		//LDC_startConversion(0);		// start conversion on channel 0
+		LDC_getDigitalOutputCode(0, &digitaloutputcode);
+		WAIT1_Waitms(1000);
+		UTIL1_Num32uToStr(&string_doc[0], sizeof(string_doc), digitaloutputcode);
+		(void)CDC1_SendString((unsigned char*)"val: ");
+		(void)CDC1_SendString((unsigned char*) string_doc);
+		(void)CDC1_SendString((unsigned char*)"\r\n");
 	}
 
 }
