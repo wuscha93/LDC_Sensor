@@ -28,6 +28,7 @@
 
 #include "Cpu.h"
 #include "Events.h"
+#include "LED1.h"
 
 #ifdef __cplusplus
 extern "C" {

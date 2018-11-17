@@ -46,6 +46,13 @@
 #include "UTIL1.h"
 #include "XF1.h"
 #include "HF1.h"
+#include "GI2C1.h"
+#include "WAIT2.h"
+#include "CI2C1.h"
+#include "SD.h"
+#include "BitIoLdd2.h"
+#include "ADDR.h"
+#include "BitIoLdd3.h"
 /* Including shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
@@ -65,10 +72,10 @@ int main(void)
   /*** End of Processor Expert internal initialization.                    ***/
 
   /* Write your code here */
-  for(int i=0;i<15;i++) { /* blink to indicate power up */
-    LED1_Neg();
-    WAIT1_Waitms(20);
-  }
+  //for(int i=0;i<15;i++) { /* blink to indicate power up */
+  //  LED1_Neg();
+  //  WAIT1_Waitms(20);
+  //}
   APP_Run(); /* should not return */
 
   /*** Don't write any code pass this line, or it will be deleted during code generation. ***/

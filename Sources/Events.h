@@ -49,6 +49,13 @@
 #include "UTIL1.h"
 #include "XF1.h"
 #include "HF1.h"
+#include "GI2C1.h"
+#include "WAIT2.h"
+#include "CI2C1.h"
+#include "SD.h"
+#include "BitIoLdd2.h"
+#include "ADDR.h"
+#include "BitIoLdd3.h"
 
 #ifdef __cplusplus
 extern "C" {
