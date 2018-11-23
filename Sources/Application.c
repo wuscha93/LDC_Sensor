@@ -15,6 +15,7 @@
 #include "GI2C1.h"
 #include "LDC_I2C.h"
 #include "WAIT1.h"
+#include "Handle_Command.h"
 
 // Variables
 static uint8_t cdc_buffer[USB1_DATA_BUFF_SIZE];
@@ -38,13 +39,16 @@ static void CDC_Run(){
 				  i++;
 			  }
 			  in_buffer[i] = '\0';
-			  (void)CDC1_SendString((unsigned char*)"echo: ");
-			  (void)CDC1_SendString(in_buffer);
-			  UTIL1_strcpy(buf, sizeof(buf), (unsigned char*)"val: ");
-			  UTIL1_strcatNum32u(buf, sizeof(buf), val);
-			  UTIL1_strcat(buf, sizeof(buf), (unsigned char*)"\r\n");
-			  (void)CDC1_SendString(buf);
-			  val++;
+			  //(void)CDC1_SendString((unsigned char*)"echo: ");
+			  //(void)CDC1_SendString(in_buffer);
+			  //UTIL1_strcpy(buf, sizeof(buf), (unsigned char*)"val: ");
+			  //UTIL1_strcatNum32u(buf, sizeof(buf), val);
+			  //UTIL1_strcat(buf, sizeof(buf), (unsigned char*)"\r\n");
+			  //(void)CDC1_SendString(buf);
+			  //val++;
+			  handleCommand(in_buffer);
+
+
 		  } else {
 			  WAIT1_Waitms(10);
 		  }
@@ -54,18 +58,18 @@ static void CDC_Run(){
 
 void APP_Run(void) {
 
-	uint32_t digitaloutputcode;
-	unsigned char string_doc[32];
+	//uint32_t digitaloutputcode;
+	//unsigned char string_doc[32];
 	LDC_Init();
 	for(;;){
 		CDC_Run();
-		WAIT1_Waitms(100);
-		LDC_getDigitalOutputCode(0, &digitaloutputcode);
-		WAIT1_Waitms(1000);
-		UTIL1_Num32uToStr(&string_doc[0], sizeof(string_doc), digitaloutputcode);
-		(void)CDC1_SendString((unsigned char*)"val: ");
-		(void)CDC1_SendString((unsigned char*) string_doc);
-		(void)CDC1_SendString((unsigned char*)"\r\n");
+		//WAIT1_Waitms(5000);
+		//LDC_getDigitalOutputCode(0, &digitaloutputcode);
+		//WAIT1_Waitms(100);
+		//UTIL1_Num32uToStr(&string_doc[0], sizeof(string_doc), digitaloutputcode);
+		//(void)CDC1_SendString((unsigned char*)"val: ");
+		//(void)CDC1_SendString((unsigned char*) string_doc);
+		//(void)CDC1_SendString((unsigned char*)"\r\n");
 	}
 
 }

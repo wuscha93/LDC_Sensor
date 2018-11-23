@@ -73,15 +73,12 @@
 #define VAL_MUX_CONFIG							0x820c
 
 
-
-
 uint8_t LDC_Init(void);
 
 uint8_t LDC_startConversion(unsigned char channel);
 
 uint8_t LDC_writeWordAddress8(uint8_t i2cDeviceAddress, uint8_t deviceRegister, uint16_t value);
 
-uint8_t LDC_readWordAddress8(uint8_t i2cDeviceAddress, uint8_t deviceRegister, uint16_t *value);
 
 uint8_t LDC_ReadWordAddress8(uint8_t deviceregister, uint16_t *buffer);
 

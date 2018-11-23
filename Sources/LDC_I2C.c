@@ -11,6 +11,7 @@
 #include "WAIT1.h"
 #include "PE_Error.h"
 
+unsigned char numberOfActivatedChannels = 0;
 
 /*
 ** ===================================================================
@@ -60,6 +61,10 @@ uint8_t LDC_Init(void){
 	retVal &= LDC_writeWordAddress8((uint8_t) LDC_DEFAULT_I2CADDR, (uint8_t) CONFIG, (uint16_t) VAL_DEFAULT_CONFIG_START_CONVERSION);
 	WAIT1_Waitms(1);
 
+	// set numberOfActiveChannels variable
+	if(((MUX_CONFIG & 0x6000)>>13) == 0 || ((MUX_CONFIG & 0x6000)>>13) == 3) 	{numberOfActivatedChannels = 2;}
+	if(((MUX_CONFIG & 0x6000)>>13) == 1) 										{numberOfActivatedChannels = 3;}
+	if(((MUX_CONFIG & 0x6000)>>13) == 2) 										{numberOfActivatedChannels = 4;}
 	return retVal;
 }
 
@@ -88,14 +93,11 @@ uint8_t LDC_writeWordAddress8(uint8_t i2cDeviceAddress, uint8_t deviceRegister, 
 	return GI2C1_WriteWordAddress8(i2cDeviceAddress, deviceRegister, v16);
 }
 
-uint8_t LDC_readWordAddress8(uint8_t i2cDeviceAddress, uint8_t deviceRegister, uint16_t *value){
-	return GI2C1_ReadWordAddress8(i2cDeviceAddress, deviceRegister, value);
-}
 
 
 /*
 ** ===================================================================
-**     Method      :  LDC_ReadWordAddress8 (uint8_t i2cDeviceAddress, uint16_t *buffer)
+**     Method      :  LDC_readWordAddress8 (uint8_t i2cDeviceAddress, uint16_t *buffer)
 **     Description :
 **         Reads a 16bit value of an 8bit I2c register of the LDC1614
 **         The MSB and LSB are changed in order to read the MSB first according to LDC1614 specification
@@ -107,11 +109,11 @@ uint8_t LDC_readWordAddress8(uint8_t i2cDeviceAddress, uint8_t deviceRegister, u
 **         				     communication was successful
 ** ===================================================================
 */
-uint8_t LDC_ReadWordAddress8(uint8_t deviceregister, uint16_t *data){
+uint8_t LDC_readWordAddress8(uint8_t deviceregister, uint16_t *data){
 	uint8_t retVal = ERR_OK;
 	uint8_t v[2];
 
-	retVal &= LDC_readWordAddress8((uint8_t) LDC_DEFAULT_I2CADDR, deviceregister, data);
+	retVal &= GI2C1_ReadWordAddress8((uint8_t) LDC_DEFAULT_I2CADDR, deviceregister, data);
 	v[1] = *data>>8;
 	v[0] = *data&0xff;
 	*data = (uint16_t) (v[0]<<8) | v[1];
@@ -136,11 +138,38 @@ uint8_t LDC_getDigitalOutputCode(unsigned char channel, uint32_t *digitaloutputc
 	uint8_t retVal = ERR_OK;
 	uint16_t v[2];
 	if (channel == 0){
-		retVal &= LDC_ReadWordAddress8((uint8_t) DATA0_MSB, &v[1]);			// get value in Register DATA0_MSB
+		retVal &= LDC_readWordAddress8((uint8_t) DATA0_MSB, &v[1]);			// get value in Register DATA0_MSB
 		WAIT1_Waitms(1);
-		retVal &= LDC_ReadWordAddress8((uint8_t) DATA0_LSB, &v[0]);			// get value in Register DATA0_LSB
-
+		retVal &= LDC_readWordAddress8((uint8_t) DATA0_LSB, &v[0]);			// get value in Register DATA0_LSB
+		WAIT1_Waitms(1);
 		*digitaloutputcode = ((uint32_t) (v[1]<<16) | v[0]) & 0xFFFFFFF;	// remove bit 31-28 (error information)
+	}
+	else if (channel == 1){
+		retVal &= LDC_readWordAddress8((uint8_t) DATA1_MSB, &v[1]);			// get value in Register DATA0_MSB
+		WAIT1_Waitms(1);
+		retVal &= LDC_readWordAddress8((uint8_t) DATA1_LSB, &v[0]);			// get value in Register DATA0_LSB
+		WAIT1_Waitms(1);
+		*digitaloutputcode = ((uint32_t) (v[1]<<16) | v[0]) & 0xFFFFFFF;	// remove bit 31-28 (error information)
+	}
+
+	else if (channel == 2 && numberOfActivatedChannels >= 3){
+		retVal &= LDC_readWordAddress8((uint8_t) DATA2_MSB, &v[1]);			// get value in Register DATA0_MSB
+		WAIT1_Waitms(1);
+		retVal &= LDC_readWordAddress8((uint8_t) DATA2_LSB, &v[0]);			// get value in Register DATA0_LSB
+		WAIT1_Waitms(1);
+		*digitaloutputcode = ((uint32_t) (v[1]<<16) | v[0]) & 0xFFFFFFF;	// remove bit 31-28 (error information)
+	}
+
+	else if (channel == 3 && numberOfActivatedChannels == 4){
+		retVal &= LDC_readWordAddress8((uint8_t) DATA2_MSB, &v[1]);			// get value in Register DATA0_MSB
+		WAIT1_Waitms(1);
+		retVal &= LDC_readWordAddress8((uint8_t) DATA2_LSB, &v[0]);			// get value in Register DATA0_LSB
+		WAIT1_Waitms(1);
+		*digitaloutputcode = ((uint32_t) (v[1]<<16) | v[0]) & 0xFFFFFFF;	// remove bit 31-28 (error information)
+	}
+	else{
+		retVal = ERR_RANGE;	// Channel not activated
+		*digitaloutputcode = 0;
 	}
 	return retVal;
 }
