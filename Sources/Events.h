@@ -45,6 +45,10 @@
 #include "USB0.h"
 #include "CLS1.h"
 #include "TMOUT1.h"
+#include "TMOUT2.h"
+#include "TI1.h"
+#include "TimerIntLdd1.h"
+#include "TU1.h"
 #include "CS1.h"
 #include "UTIL1.h"
 #include "XF1.h"
@@ -76,6 +80,53 @@ extern "C" {
 /* ===================================================================*/
 void Cpu_OnNMIINT(void);
 
+
+void GI2C1_OnError(void);
+/*
+** ===================================================================
+**     Event       :  GI2C1_OnError (module Events)
+**
+**     Component   :  GI2C1 [GenericI2C]
+**     Description :
+**         Event called in case of error condition
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+
+/*
+** ===================================================================
+**     Event       :  CI2C1_OnError (module Events)
+**
+**     Component   :  CI2C1 [I2C_LDD]
+*/
+/*!
+**     @brief
+**         This event is called when an error (e.g. Arbitration lost)
+**         occurs. The errors can be read with GetError method.
+**     @param
+**         UserDataPtr     - Pointer to the user or
+**                           RTOS specific data. This pointer is passed
+**                           as the parameter of Init method.
+*/
+/* ===================================================================*/
+void CI2C1_OnError(LDD_TUserData *UserDataPtr);
+
+/*
+** ===================================================================
+**     Event       :  TI1_OnInterrupt (module Events)
+**
+**     Component   :  TI1 [TimerInt]
+**     Description :
+**         When a timer interrupt occurs this event is called (only
+**         when the component is enabled - <Enable> and the events are
+**         enabled - <EnableEvent>). This event is enabled only if a
+**         <interrupt service/event> is enabled.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void TI1_OnInterrupt(void);
 
 /* END Events */
 

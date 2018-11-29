@@ -10,6 +10,6 @@
 
 void handleCommand(uint8_t *cmd);
 
-
+void send_I2CError(void);
 
 #endif /* SOURCES_HANDLE_COMMAND_H_ */

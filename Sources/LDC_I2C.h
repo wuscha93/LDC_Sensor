@@ -92,5 +92,9 @@ void setNumberofActivatedChannels(unsigned char value);
 
 unsigned char getNumberofActivatedChannels();
 
+void setcurrentCONFIGvalue(uint16_t value);
+
+uint16_t getcurrentCONFIGvalue();
+
 
 #endif /* SOURCES_LDC_I2C_H_ */
