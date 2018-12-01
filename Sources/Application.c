@@ -23,27 +23,24 @@ static uint8_t in_buffer[USB1_DATA_BUFF_SIZE];
 
 static void CDC_Run(){
 	int i = 0;
-	uint32_t val = 0;
-	unsigned char buf[16];
 
-	  if(CDC1_App_Task(cdc_buffer, sizeof(cdc_buffer))==ERR_BUSOFF) {						// while no USB CDC connection
-	    /* device not enumerated */
-	    WAIT1_Waitms(2);
-	  }
-	  else{																					// check USB CDC input buffer
-		  //LED1_Off();
-		  if (CDC1_GetCharsInRxBuf()!=0) {													// if input buffer != zero
-			  WAIT1_Waitms(1);
-			  i = 0;																		// call handleCommand()
-			  while(i<sizeof(in_buffer)-1 && CDC1_GetChar(&in_buffer[i])==ERR_OK) {
-				  i++;
-			  }
-			  in_buffer[i] = '\0';
-			  handleCommand(in_buffer);
-		  } else {
-			  WAIT1_Waitms(1);
-		  }
-	  }
+	if(CDC1_App_Task(cdc_buffer, sizeof(cdc_buffer))==ERR_BUSOFF) {						// USB CDC connection every 2ms
+	  /* device not enumerated */
+	  WAIT1_Waitms(2);
+	}
+	else{																				// check USB CDC input buffer
+		if (CDC1_GetCharsInRxBuf()!=0) {												// if data received
+		 WAIT1_Waitms(1);																// wait to receive full data string
+			i = 0;
+			while(i<sizeof(in_buffer)-1 && CDC1_GetChar(&in_buffer[i])==ERR_OK) {
+		      i++;
+			}
+			in_buffer[i] = '\0';
+			handleCommand(in_buffer);													// call handleCommand()
+		} else {
+			WAIT1_Waitms(1);															// no data received yet
+		}
+	}
 }
 
 

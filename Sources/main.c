@@ -76,10 +76,6 @@ int main(void)
   /*** End of Processor Expert internal initialization.                    ***/
 
   /* Write your code here */
-  //for(int i=0;i<15;i++) { /* blink to indicate power up */
-  //  LED1_Neg();
-  //  WAIT1_Waitms(20);
-  //}
   APP_Run(); /* should not return */
 
   /*** Don't write any code pass this line, or it will be deleted during code generation. ***/

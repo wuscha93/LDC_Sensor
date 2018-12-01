@@ -66,6 +66,7 @@
 #define VAL_DEFAULT_CONFIG_START_CONVERSION		0x1a01
 #define VAL_RESET_DEV							0x8000
 #define VAL_SETTLECOUNT							0x0400
+#define VAL_DRIVE_CURRENT						0x5800
 #define VAL_RCOUNT								0xffff
 #define VAL_OFFSET								0x0000
 #define VAL_CLOCK_DIVIDERS						0x1001
