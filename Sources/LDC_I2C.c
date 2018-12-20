@@ -2,7 +2,7 @@
  * LDC_I2C.c
  *
  *  Created on: Nov 16, 2018
- *      Author: ADRIAN
+ *  Author: Adrian Bucher
  */
 
 #include "GI2C1.h"
@@ -147,9 +147,9 @@ uint8_t LDC_getDigitalOutputCode(unsigned char channel, uint32_t *digitaloutputc
 	uint8_t retVal = ERR_OK;
 	uint16_t v[2] = {0,0};
 	if (channel == 0){
-		retVal |= LDC_readWordAddress8((uint8_t) DATA0_MSB, &v[1]);			// get value in Register DATA0_MSB
+		retVal |= LDC_readWordAddress8((uint8_t) DATA0_MSB, &v[1]);			// get value of Register DATA0_MSB
 		WAIT1_Waitus(100);
-		retVal |= LDC_readWordAddress8((uint8_t) DATA0_LSB, &v[0]);			// get value in Register DATA0_LSB
+		retVal |= LDC_readWordAddress8((uint8_t) DATA0_LSB, &v[0]);			// get value of Register DATA0_LSB
 		WAIT1_Waitus(100);
 		*digitaloutputcode = ((uint32_t) (v[1]<<16) | v[0]) & 0xFFFFFFF;	// remove bit 31-28 (error information)
 	}
@@ -177,7 +177,7 @@ uint8_t LDC_getDigitalOutputCode(unsigned char channel, uint32_t *digitaloutputc
 		*digitaloutputcode = ((uint32_t) (v[1]<<16) | v[0]) & 0xFFFFFFF;
 	}
 	else{
-		*digitaloutputcode = 0;												// not supportet channel or channel not activated
+		*digitaloutputcode = 0;												// not supported channel or channel not activated
 																			// set digitaloutputcode to zero
 	}
 	return retVal;

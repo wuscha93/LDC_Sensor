@@ -2,13 +2,13 @@
  * Handle_Command.c
  *
  *  Created on: Nov 23, 2018
- *      Author: ADRIAN
+ *  Author: Adrian Bucher
  */
-
 
 #include "UTIL1.h"
 #include "LDC_I2C.h"
 #include "CDC1.h"
+#include "Handle_Command.h"
 
 void handleCommand(uint8_t *cmd){
 	uint32_t data32;					// 32 bit data buffer
@@ -33,11 +33,11 @@ void handleCommand(uint8_t *cmd){
 			if(LDC_getDigitalOutputCode((unsigned char) channel, &data32) != ERR_OK){			// Notify via USB CDC if I2C communication is corrupted
 				(void)CDC1_SendString((unsigned char*)"Error tinyk20: getDOC");
 			}
-			else if (data32 > 100000000) { 														// if Digital output-code is too high -> Sensor not plugged in
-					data32 = 0;																	// set digital output code to zero
-				 }
-				 UTIL1_Num32uToStr(&data_string[0], sizeof(data_string), data32);
-				 (void)CDC1_SendString((unsigned char*)data_string);
+			else if (data32 > OUTPUTCODE_UPPER_LIMIT) { 									// if Digital output-code is too high -> Sensor not plugged in
+				data32 = 0;																	// set digital output code to zero
+			}
+			UTIL1_Num32uToStr(&data_string[0], sizeof(data_string), data32);
+			(void)CDC1_SendString((unsigned char*)data_string);
 		}
 	}
 
@@ -52,7 +52,7 @@ void handleCommand(uint8_t *cmd){
 
 	}
 
-	else if(UTIL1_strncmp(cmd, "setRCOUNT ", sizeof("setRCOUNT ")-1)==0){						// set data of LDC1614 RCOUNT register
+	else if(UTIL1_strncmp(cmd, "setRCOUNT ", sizeof("setRCOUNT ")-1)==0){					 		// set data of LDC1614 RCOUNT register
 
 		p = cmd+sizeof("setRCOUNT ")-1;
 		retVal |= UTIL1_xatoi(&p, &channel);
@@ -358,7 +358,7 @@ void handleCommand(uint8_t *cmd){
 			}
 	}
 	else{
-		(void)CDC1_SendString((unsigned char*)"Error tinyk20: command not found");
+		(void)CDC1_SendString((unsigned char*)"Error tinyk20: command not found");					// command not implemented or error during USB CDC connection
 	}
 }
 

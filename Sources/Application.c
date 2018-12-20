@@ -2,7 +2,7 @@
  * Application.c
  *
  *  Created on: Nov 16, 2018
- *      Author: ADRIAN
+ *  Author: Adrian Bucher
  */
 
 #include "Application.h"

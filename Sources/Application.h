@@ -2,7 +2,7 @@
  * Application.h
  *
  *  Created on: Nov 16, 2018
- *      Author: ADRIAN
+ *  Author: Adrian Bucher
  */
 
 #ifndef __APPLICATION_H_

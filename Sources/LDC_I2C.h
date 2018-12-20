@@ -2,26 +2,24 @@
  * LDC_I2C.h
  *
  *  Created on: Nov 16, 2018
- *      Author: ADRIAN
+ *  Author: Adrian Bucher
  */
 
 #ifndef __LDC_I2C_H_
 #define __LDC_I2C_H_
 
+/****************************
+   global variabless
+****************************/
 
-// Global Variable
-
-
-// LDC i2C Address
-
+// LDC I2C Address
 #define LDC_MIN_I2CADDR     0x2A
 #define LDC_MAX_I2CADDR     0x2B
 #define LDC_DEFAULT_I2CADDR LDC_MIN_I2CADDR
-//#define EVM_DEFAULTS_SIZE 24 // 13 registers, 0x08 - 0x14
+
 
 
 // LDC I2C Registers
-
 #define DATA0_MSB			0x00
 #define	DATA0_LSB			0x01
 #define	DATA1_MSB			0x02
